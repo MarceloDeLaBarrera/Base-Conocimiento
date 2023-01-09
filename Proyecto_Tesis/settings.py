@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'base_app',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -72,6 +76,8 @@ TEMPLATES = [
     },
 ]
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+
 WSGI_APPLICATION = 'Proyecto_Tesis.wsgi.application'
 
 
@@ -79,6 +85,14 @@ WSGI_APPLICATION = 'Proyecto_Tesis.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #         'NAME': 'baseknowledge',
+    #         'USER': 'postgres',
+    #         'PASSWORD': 'sasasa123',
+    #         'HOST': '127.0.0.1',
+    #         'DATABASE_PORT': '5432',
+    #     }
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -130,7 +144,68 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-GRAPH_MODELS = {
-    'all_applications': True,
-    'group_models': True,
+LOGIN_REDIRECT_URL = '/admin'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Insaitas",
+    "site_logo": "img/logo.png",
+    "welcome_sign": "Iniciar Sesión",
+    "copyright": "/ Beroíza - De La Barrera",
+    "topmenu_links": [
+
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home",  "url": "admin:index",
+            "permissions": ["auth.view_user"]},
+
+
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {"app": "base_app"},
+
+    ],
+
+    "search_model": ["base_app.cliente",],
+    "custom_links": {
+        "base_app": [{
+            "name": "Sitio Web",
+            "url": "https://www.insaitas.com/",
+            "icon": "fas fa-globe",
+            "permissions": ["base_app.view_base_app"]
+        },
+            {
+            "name": "Linkedin",
+            "url": "https://www.linkedin.com/company/2624503",
+            "icon": "fab fa-brands fa-linkedin",
+        },
+            {
+            "name": "Facebook",
+            "url": "https://www.facebook.com/Insaitas?fref=nf",
+            "icon": "fab fa-inverse fa-brands fa-facebook",
+        },
+
+        ]
+    },
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "base_app.documentocliente": "fa-sharp fas fa-folder-open",
+        "base_app.documentogeneral": "fas fa-file",
+        "base_app.recomendacioncliente": "fas fa-comment",
+        "base_app.consultor": "fas fa-user-tie",
+        "base_app.cliente": "fas fa-user-plus",
+    },
+    "language_chooser": True,
+    "use_google_fonts_cdn": True,
+    "show_ui_builder": True,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
+    "accent": "accent-lightblue",
+    "sidebar": "sidebar-dark-info",
+    "brand_colour": "navbar-navy",
 }

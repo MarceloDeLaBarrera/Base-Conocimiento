@@ -13,14 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+from posixpath import relpath
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse
+from django.shortcuts import redirect
 from django.conf import settings
+from base_app import views
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
+    path('admin/', admin.site.urls),
+    path("register/", views.register_request, name="register"),
+    path("", views.admin_view, name="home"),
 ]
 
 if settings.DEBUG:
@@ -28,5 +35,5 @@ if settings.DEBUG:
                           document_root=settings.MEDIA_ROOT)
 
 admin.site.site_header = "Base de Conocimiento"
-admin.site.index_title = "Bienvenido !"
+admin.site.index_title = "Base de Conocimiento"
 admin.site.site_url = "/admin"

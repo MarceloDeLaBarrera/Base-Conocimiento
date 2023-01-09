@@ -57,7 +57,7 @@ def document_upload_location(instance, filename):
 
 
 class Consultor(models.Model):
-    usuario = models.ForeignKey(
+    usuario = models.OneToOneField(
         User, on_delete=models.CASCADE)
     nombre = models.CharField(
         max_length=150,
@@ -102,7 +102,9 @@ class Cliente(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         db_column='creado_por',
-        verbose_name='Creado Por',)
+        verbose_name='Creado Por',
+        default=None,
+    )
     rut = models.CharField(
         max_length=30,
         db_column='rut',
@@ -170,9 +172,6 @@ class DocumentoCliente(models.Model):
         verbose_name='Nombre Documento',
     )
     descripcion_documento = models.TextField(
-        blank=True,
-        null=True,
-        default=None,
         db_column='descripcion_documento',
         verbose_name='Descripción del Documento',
     )
@@ -185,14 +184,12 @@ class DocumentoCliente(models.Model):
     documento = models.FileField(
         upload_to=document_upload_location,
         verbose_name='Documento',
-        blank=True,
-        null=True,
     )
 
     class Meta:
         db_table = 'documentos_clientes'
         verbose_name = 'Documento'
-        verbose_name_plural = 'Documentos'
+        verbose_name_plural = 'Documentos Clientes'
 
 
 class RecomendacionCliente(models.Model):
@@ -212,14 +209,20 @@ class RecomendacionCliente(models.Model):
 
 class DocumentoGeneral(models.Model):
 
+    creado_por = models.ForeignKey(
+        Consultor,
+        on_delete=models.SET_NULL,
+        null=True,
+        db_column='creado_por',
+        verbose_name='Creado Por',
+        default=None,
+    )
     nombre = models.CharField(
         max_length=150,
         db_column='nombre_documento_general',
         verbose_name='Nombre Documento',
     )
     descripcion = models.TextField(
-        blank=True,
-        null=True,
         db_column='descripcion_doc',
         verbose_name='Descripción del Documento',
     )

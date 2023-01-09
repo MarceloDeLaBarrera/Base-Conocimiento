@@ -19,9 +19,9 @@ class RecomendacionInLine(admin.StackedInline):
 
 class ClienteAdmin(admin.ModelAdmin):
     list_display = (
+        'rut',
         'fecha_creacion',
         'creado_por',
-        'rut',
         'nombre',
         'razon_social',
         'direccion',
@@ -31,6 +31,17 @@ class ClienteAdmin(admin.ModelAdmin):
         'tipo_sistema',
     )
     inlines = [DocumentoInLine, RecomendacionInLine]
+
+    readonly_fields = (
+        'creado_por',
+    )
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            consultor = Consultor.objects.get(id=request.user.id)
+            print(consultor)
+            obj.creado_por = consultor
+        super().save_model(request, obj, form, change)
 
 
 class ConsultorAdmin(admin.ModelAdmin):
@@ -55,11 +66,23 @@ class DocumentoClienteAdmin(admin.ModelAdmin):
 
 class DocumentosGeneralesAdmin(admin.ModelAdmin):
     list_display = (
+        'creado_por',
         'nombre',
         'descripcion',
         'tipo',
         'documento',
     )
+
+    readonly_fields = (
+        'creado_por',
+    )
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            consultor = Consultor.objects.get(id=request.user.id)
+            print(consultor)
+            obj.creado_por = consultor
+        super().save_model(request, obj, form, change)
 
 
 class RecomendacionAdmin(admin.ModelAdmin):
